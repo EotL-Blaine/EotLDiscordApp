@@ -53,17 +53,17 @@ async def on_ready():
     print(f'Channel is: {channel}')
 
 
-    # for channel2 in guild.channels:
-    #     if channel2.name == "bitch":
-    #         break
+    for channel2 in guild.channels:
+        if channel2.name == "bitch":
+            break
 
-    # await channel2.send("Hello world part 2")
+    await channel2.send("Testing")
 
 
     # channel = discord.Object(id="bitch")
-    channel = discord.Object(id="bitch")
-    print("CHANNEL: "+channel.name)
-    await channel.send("Hello world")
+    # channel = discord.Object(id="bitch")
+    # print("CHANNEL: "+channel.name)
+    # await channel.send("Hello world")
 
 
     # global target_channel
