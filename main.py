@@ -45,13 +45,34 @@ async def test_join(ctx):
         "1) have fun\n2) don't piss someone off bigger than you"
         )
 
+@bot.event
+async def on_message(message):
+    '''
+    Called when a member posts a message in a discord channel
+
+    :param message: message object
+    '''
+
+    if message.author == bot.user:
+        return
+
+    if (message.content[0] == '!'):
+        await message.channel.send(
+            f'Command given: {message.content[1:]}'
+        )
+        # do command
+        await bot.process_commands(message)
+        return
+
+    await message.channel.send(
+        f'Message: {message.content}\n'
+    )
+    print(f"Relayed: {message.content}")
+
 # async def send(*, message):
 #     print(f'Message: {message}\n')
 #     global target_channel
 #     await bot.send_message(target_channel, message)
-
-# client = EotlClient()
-# client.run(client.TOKEN)
 
 bot.run(TOKEN)
 
