@@ -38,4 +38,41 @@ class EotlClient(discord.Client):
         print(f'{self.user} has connected to Discord!\n'
               f'{guild.name} (id: {guild.id})' )
 
+    async def on_member_joint(self, member):
+        '''
+        Called upon a new member joining the server
 
+        Parameters
+        ----------
+        member : member object
+        '''
+        await member.create_dm()
+        await member.dm_channel.send(
+            f'Welcome, {member.name} to the End of the Line Discord!,\n'
+            f'Remember the rules:\n'
+            f"1) have fun\n2) don't piss someone off bigger than you"
+        )
+        # show additional commands for the bot, and in-game
+
+    async def on_message(self, message):
+        '''
+        Called when a member posts a message in a discord channel
+
+        :param message: message object
+        '''
+
+        if message.author == self.user:
+            return
+
+        if (message.content[0] == '!'):
+            await message.channel.send(
+                f'Command given: {message.content}'
+            )
+            # do command
+            return
+
+        # if (message.content == 'testing 123'):
+        await message.channel.send(
+            f'Message: {message.content}\n'
+        )
+        print(f"Relayed: {message.content}")
