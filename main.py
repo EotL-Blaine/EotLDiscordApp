@@ -29,9 +29,23 @@ async def add(ctx, left: int, right: int):
 async def who(ctx, *args):
     """
     Get list of who is on the game
+    Default list, color eval i guess
+        [Jan]  Cozminsky (5m)
+        [Frob] Blaine
+        [350]  Torr      (60m)
+    Alternate list by guild:
+        Etc
+        [Jan]  Cozminsky
+        Red Disciple
+        [174]  Butkus
+        Fighter
+        [5]    Lilguy
+        - Swordsman
+        [132]  Liveblade
+
     :param ctx:
     :param args: string (optional) args,
-        syntax: same form used in game (who -ps eval i:3000 is the standard)
+        syntax: /guild
     """
     # just using the discord who for the time being
     members = discord_who.get_discord_who(ctx.guild)
