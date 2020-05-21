@@ -38,7 +38,7 @@ class EotlClient(discord.Client):
         print(f'{self.user} has connected to Discord!\n'
               f'{guild.name} (id: {guild.id})' )
 
-    async def on_member_joint(self, member):
+    async def on_member_join(self, member):
         '''
         Called upon a new member joining the server
 
@@ -66,7 +66,7 @@ class EotlClient(discord.Client):
 
         if (message.content[0] == '!'):
             await message.channel.send(
-                f'Command given: {message.content}'
+                f'Command given: {message.content[1:]}'
             )
             # do command
             return
