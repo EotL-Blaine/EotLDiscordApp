@@ -1,28 +1,59 @@
-# import os
-# import discord
-# from dotenv import load_dotenv
-from discord.ext.commands import Bot
-from discord_stuff.eotl_client import EotlClient
+import os
+import discord
+from dotenv import load_dotenv
+from discord.ext import commands
 
-# load_dotenv()
-# TOKEN = os.getenv('DISCORD_TOKEN')
-# GUILD = os.getenv('DISCORD_GUILD')
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
+GUILD = os.getenv('DISCORD_GUILD')
+description = '''The End of the Line LPMUD Discord Bot'''
 
-bot = Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='!', description=description)
 
 @bot.event
 async def on_ready():
+    """ Called when discord bot is connected and ready """
     print("Bot connected.")
+    guild = bot.get_guild(int(GUILD))
+    print(f'{bot.user} has connected to Discord!\n'
+          f'{guild.name} (id: {guild.id})')
 
 @bot.command()
-async def send(*, message):
-    print(f'Message: {message}\n')
-    global target_channel
-    await bot.send_message(target_channel, message)
+async def add(ctx, left: int, right: int):
+    await ctx.send(left+right)
 
-client = EotlClient()
-client.run(client.TOKEN)
+@bot.command()
+async def joined(ctx, member: discord.Member):
+    """Says when a member joined."""
+    await ctx.send(
+        f'Welcome, {member.name} to the End of the Line Discord!,\n'
+        f'Remember the rules:\n'
+        "1) have fun\n2) don't piss someone off bigger than you"
+        )
+        # show additional commands for the bot, and in-game
+#
+    pass
+    # await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
 
+@bot.command(name='test_join')
+# async def test_join(ctx, member: discord.Member):
+async def test_join(ctx):
+    joiner = ctx.author
+    await ctx.send(
+        f'Welcome, {joiner.name}, to the End of the Line Discord!,\n'
+        f'Remember the rules:\n'
+        "1) have fun\n2) don't piss someone off bigger than you"
+        )
+
+# async def send(*, message):
+#     print(f'Message: {message}\n')
+#     global target_channel
+#     await bot.send_message(target_channel, message)
+
+# client = EotlClient()
+# client.run(client.TOKEN)
+
+bot.run(TOKEN)
 
 # get guild stuff
 # for guild in client.guilds:
