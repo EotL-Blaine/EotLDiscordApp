@@ -12,8 +12,7 @@ David Halek (blaine @ eotl)
  
 ### Discord features
 - see who is logged into the game
-  - standard is to do a who showing eval/wiz level, and idle time
-    filtering out anyone idle for more than an hour most likely
+  - standard is to do a who showing eval/lvl, filter out idle > 1 hr
   - can also do who -ps eval f:3000 or whatever
 - see who has logged into the game on a given day
 - request channel privs (requires making sure they have an eval 80 or higher in game)
