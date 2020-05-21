@@ -3,6 +3,8 @@ import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 
+from discord_stuff import discord_who
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
@@ -20,23 +22,33 @@ async def on_ready():
 
 @bot.command()
 async def add(ctx, left: int, right: int):
+    """Tester function, syntax:  !add x y"""
     await ctx.send(left+right)
+
+@bot.command(name='who')
+async def who(ctx, *args):
+    """
+    Get list of who is on the game
+    :param ctx:
+    :param args: string (optional) args,
+        syntax: same form used in game (who -ps eval i:3000 is the standard)
+    """
+    # just using the discord who for the time being
+    members = discord_who.get_discord_who(ctx.guild)
+    await ctx.send(f'Members: \n{members}')
 
 @bot.command()
 async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
+    # await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
     await ctx.send(
-        f'Welcome, {member.name} to the End of the Line Discord!,\n'
+        f'Welcome, {member.name} to the End of the Line Discord!,\n\n'
         f'Remember the rules:\n'
         "1) have fun\n2) don't piss someone off bigger than you"
         )
         # show additional commands for the bot, and in-game
-#
-    pass
-    # await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
 
 @bot.command(name='test_join')
-# async def test_join(ctx, member: discord.Member):
 async def test_join(ctx):
     joiner = ctx.author
     await ctx.send(
@@ -69,6 +81,7 @@ async def on_message(message):
     )
     print(f"Relayed: {message.content}")
 
+# async def send(ctx, *, message) should be correct syntax
 # async def send(*, message):
 #     print(f'Message: {message}\n')
 #     global target_channel
