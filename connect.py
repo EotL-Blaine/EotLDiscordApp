@@ -15,6 +15,11 @@ PASS = os.getenv('EOTL_PASS')
 # password = 'fatboy'
 PROMPT = b"Ready>"
 
+def execute_discord_command(cmd=None):
+    pass
+
+
+
 def get_who_list(tn):
     print("========[ WHO LIST  ]========")
     tn.write(b"who -ps eval -f i:3000\n")
@@ -55,11 +60,16 @@ with Telnet(HOST, PORT) as tn:
 
     # print(tn.read_until(PROMPT).decode('ascii'))
     # print(tn.read_all().decode('ascii'))
-    test_str = bytes(f'tell {"blaine"} hi\n', 'ascii')
+    print("Before test_str...")
+    test_str = bytes('tell blaine hi\n', 'ascii')
+    print(f"test_str = '{test_str}' type = '{type(test_str)}'")
     tn.write(test_str)
+    print("After the write...")
     # tn.write(b"tell blaine hi\n")
     # text = tn.read_until(b'aving')
-    print(tn.read_all().decode('ascii'))
+    # Thanks for playing, come back soon
+    # print(tn.read_until.decode('ascii'))
+    print(tn.read_until(PROMPT).decode('ascii'))
     tn.write(b"quit\n")
     # print(text)
 
