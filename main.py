@@ -90,9 +90,72 @@ async def on_message(message):
         await bot.process_commands(message)
         return
 
-    await message.channel.send(
-        f'Message: {message.content}\n'
-    )
+    jan =  "[Jan ]"
+    arch = "[Arch]"
+    play = "278"
+    n1 = "Cozminksy"
+    n2 = "Arphen"
+    n3 = "Torralt"
+
+    who_list = ([
+        f'{"[Jan ]":^6} {n1:13} : Etc (3m)',
+        f'{"[Arch]":^6} {n2:13} : Capacitor (15m)',
+        f'{"[Frob]":^6} {"Blaine":13} : Cleric (15m)',
+        f'{"235":^6} {"Torr_alt":13} : Headhunter (>1hr)',
+        f'{"117":^6} {"Dude":13} : Bodyguard (15m)',
+        f'{"95":^6} {"Ratchet":13} : Berserker (9m)',
+        f'{"9":^6} {"Gorda":13} : None (>1hr)',
+    ])
+
+    # who_list[0] =  f"```md\n# {who_list[0]}```"
+    # who_list[1] =  f"```py\n@ {who_list[1]}```"
+    # who_list[2] =  f"```py\n@ {who_list[2]}```"
+    # who_list[3] =  f"```md\n> {who_list[3]}```"
+    # who_list[4] =  f"```md\n# {who_list[4]}```"
+    # who_list[5] =  f"```md\n# {who_list[5]}```"
+    # who_list[6] =  f"```md\n> {who_list[6]}```"
+
+    # who_list[0] =  f"md\n# {who_list[0]}"
+    # who_list[1] =  f"py\n@ {who_list[1]}"
+    # who_list[2] =  f"py\n@ {who_list[2]}"
+    # who_list[3] =  f"md\n> {who_list[3]}"
+    # who_list[4] =  f"md\n# {who_list[4]}"
+    # who_list[5] =  f"md\n# {who_list[5]}"
+    # who_list[6] =  f"md\n> {who_list[6]}"
+
+    who_list[0] =  f"# {who_list[0]}"
+    who_list[1] =  f"- {who_list[1]}"
+    who_list[2] =  f"- {who_list[2]}"
+    who_list[3] =  f"> {who_list[3]}"
+    who_list[4] =  f"# {who_list[4]}"
+    who_list[5] =  f"# {who_list[5]}"
+    who_list[6] =  f"> {who_list[6]}"
+
+    x = f"```md\n{'==============[ EotL - Who ]==============':^40}\n\n"
+    for w in who_list:
+        x += w + "\n"
+    x += "```"
+
+    p1 = f'{jan:^6} {n1:13} : Etc (3m)'
+    p2 = f'{arch:^6} {n2:13} : Capacitor (15m)'
+    p3 = f'{play:^6} {n3:13} : Headhunter (>1hr)'
+
+    await message.channel.send( x )
+    #
+    #     f"```md\n# {p1}```"
+    #     f"```py\n@ {p2}```"
+    #     f"```md\n> {p3}```"
+    #
+    # )
+        
+    '''
+        [Jan]  Cozminsky    (Pacifist)
+        [Arch] Arphen       (Capacitor)
+        [Gue]  Randoguest   (Hobo)
+        [258]  Torralt      (Red disciple)
+        [158]  Multiped     (Berzerker)
+    '''
+
     print(f"Relayed: {message.content}")
 
 # async def send(ctx, *, message) should be correct syntax
@@ -102,6 +165,20 @@ async def on_message(message):
 #     await bot.send_message(target_channel, message)
 
 bot.run(TOKEN)
+
+# COLOR STUFF
+# f"```\n**Blaine** {message.content}\n```"
+# f"```cs\n<Butkus> and then some!\n```"
+# f"```diff\n-<InRed> and on and on again!\n```"
+# f"```CSS\n**<InYellow>** whatever you say, hoss```"
+# f"```cs\n'**<dunno>** asdfadsddfa'\n```"
+# f"```= Blue =\n**<dunno>** asdfadsddfa\n```"
+# f"```asciidoc\n<asciidoc>**<dunno>** asdfadsddfa\n```"
+# f"```---\n**<dunno>** asdfadsddfa\n```"
+# "```xml\n<Blue first then Yellow = OneGreenWord after equals sign>```"
+# f"```CSS\n{jan:6} {n1:13} (Etc) (3m)```"
+# f"```py\n@{jan:6} {n2:13} (Etc) (15m)```"
+# f"```md\n> {jan:6} {n3:13} (Whatever) (>1hr)```"
 
 # get guild stuff
 # for guild in client.guilds:
