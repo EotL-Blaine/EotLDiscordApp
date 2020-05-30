@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 
 from discord_stuff import discord_who
+from mud_stuff import mud_who
+from mud_stuff import test_list
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -28,20 +30,7 @@ async def add(ctx, left: int, right: int):
 @bot.command(name='who')
 async def who(ctx, *args):
     """
-    Get list of who is on the game
-    Default list, color eval i guess
-        [Jan]  Cozminsky (5m)
-        [Frob] Blaine
-        [350]  Torr      (60m)
-    Alternate list by guild:
-        Etc
-        [Jan]  Cozminsky
-        Red Disciple
-        [174]  Butkus
-        Fighter
-        [5]    Lilguy
-        - Swordsman
-        [132]  Liveblade
+    Get list of who is on the MUD
 
     :param ctx:
     :param args: string (optional) args,
@@ -82,6 +71,14 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
+    if (message.content == "!who"):
+        # relay who command to telnet
+        j_list= test_list.test_list_json
+        who = mud_who.default_who(j_list)
+        x = "\n".join(who)
+        await message.channel.send(x)
+        return
+
     if (message.content[0] == '!'):
         await message.channel.send(
             f'Command given: {message.content[1:]}'
@@ -90,72 +87,8 @@ async def on_message(message):
         await bot.process_commands(message)
         return
 
-    jan =  "[Jan ]"
-    arch = "[Arch]"
-    play = "278"
-    n1 = "Cozminksy"
-    n2 = "Arphen"
-    n3 = "Torralt"
-
-    who_list = ([
-        f'{"[Jan ]":^6} {n1:13} : Etc (3m)',
-        f'{"[Arch]":^6} {n2:13} : Capacitor (15m)',
-        f'{"[Frob]":^6} {"Blaine":13} : Cleric (15m)',
-        f'{"235":^6} {"Torr_alt":13} : Headhunter (>1hr)',
-        f'{"117":^6} {"Dude":13} : Bodyguard (15m)',
-        f'{"95":^6} {"Ratchet":13} : Berserker (9m)',
-        f'{"9":^6} {"Gorda":13} : None (>1hr)',
-    ])
-
-    # who_list[0] =  f"```md\n# {who_list[0]}```"
-    # who_list[1] =  f"```py\n@ {who_list[1]}```"
-    # who_list[2] =  f"```py\n@ {who_list[2]}```"
-    # who_list[3] =  f"```md\n> {who_list[3]}```"
-    # who_list[4] =  f"```md\n# {who_list[4]}```"
-    # who_list[5] =  f"```md\n# {who_list[5]}```"
-    # who_list[6] =  f"```md\n> {who_list[6]}```"
-
-    # who_list[0] =  f"md\n# {who_list[0]}"
-    # who_list[1] =  f"py\n@ {who_list[1]}"
-    # who_list[2] =  f"py\n@ {who_list[2]}"
-    # who_list[3] =  f"md\n> {who_list[3]}"
-    # who_list[4] =  f"md\n# {who_list[4]}"
-    # who_list[5] =  f"md\n# {who_list[5]}"
-    # who_list[6] =  f"md\n> {who_list[6]}"
-
-    who_list[0] =  f"# {who_list[0]}"
-    who_list[1] =  f"- {who_list[1]}"
-    who_list[2] =  f"- {who_list[2]}"
-    who_list[3] =  f"> {who_list[3]}"
-    who_list[4] =  f"# {who_list[4]}"
-    who_list[5] =  f"# {who_list[5]}"
-    who_list[6] =  f"> {who_list[6]}"
-
-    x = f"```md\n{'==============[ EotL - Who ]==============':^40}\n\n"
-    for w in who_list:
-        x += w + "\n"
-    x += "```"
-
-    p1 = f'{jan:^6} {n1:13} : Etc (3m)'
-    p2 = f'{arch:^6} {n2:13} : Capacitor (15m)'
-    p3 = f'{play:^6} {n3:13} : Headhunter (>1hr)'
-
-    await message.channel.send( x )
-    #
-    #     f"```md\n# {p1}```"
-    #     f"```py\n@ {p2}```"
-    #     f"```md\n> {p3}```"
-    #
-    # )
-        
-    '''
-        [Jan]  Cozminsky    (Pacifist)
-        [Arch] Arphen       (Capacitor)
-        [Gue]  Randoguest   (Hobo)
-        [258]  Torralt      (Red disciple)
-        [158]  Multiped     (Berzerker)
-    '''
-
+    # put code here to relay it to mud
+    await message.channel.send(f"```py\n@Relay: {message.content}\n```")
     print(f"Relayed: {message.content}")
 
 # async def send(ctx, *, message) should be correct syntax
