@@ -1,3 +1,4 @@
+import asyncio
 import json
 from telnetlib import Telnet
 import os
@@ -60,12 +61,26 @@ class Connect:
 
             # Start input loop
             print("========[ LOOPING ]========")
+
+            # try:
+            #     while True:
+            #         message = tn.read_until(b'\n', timeout=.1).decode('ascii')
+            #         if message != b'' and message != '':
+            #             print("===>", message)
+            # except EOFError:
+            #     print("=====[ Connection Closed ]=====")
+
+            self.tn = tn
+
             while connected:
                 tn.read_until(b"***BEGIN***")
                 msg = tn.read_until(b"***END***").decode('ascii')[0:-9]
-                print(f'MESSAGE: {msg}')
-                print("FROM JSON: ",json.loads(msg))
-                self.package_received(msg)
+                if msg == 'hi':
+                    self.send_reply("hi")
+                else:
+                    print(f'MESSAGE: {msg}')
+                    print("FROM JSON: ",json.loads(msg))
+                    self.package_received(msg)
                 # Todo: do command here
                 if msg == 'disconnect':
                     connected = False
@@ -89,6 +104,18 @@ class Connect:
             print(tn.read_until(self.PROMPT).decode('ascii'))
             tn.write(b"quit\n")
             # print(text)
+
+    async def a_send_reply(self, what):
+        if what is not None:
+            msg = what.encode('ascii' + b"\n")
+            await self.tn.write(msg)
+        else:
+            await self.tn.write("Null message".encode('ascii')+b"\n")
+
+    def send_reply(self, what):
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.a_send_reply("tell blaine Received"))
+
 
 
 
