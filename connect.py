@@ -107,8 +107,21 @@ class Connect:
 
     async def a_send_reply(self, what):
         if what is not None:
-            msg = what.encode('ascii' + b"\n")
-            await self.tn.write(msg)
+            msg = what.encode('ascii')
+            msg = bytes(f'{what}\n', 'utf-8')
+            print("=====>", msg)
+
+            # msg = what.encode('ascii' + b"\n")
+            try:
+                # await self.tn.write(msg.encode('ascii'))
+                await self.tn.write(msg)
+            except Exception as ex:
+                print("===============================================================")
+                print("EXCEPTION: ", ex)
+                print("===============================================================")
+                print("  tn: ", self.tn)
+                print("  msg: ", msg)
+                print("  what: ", what)
         else:
             await self.tn.write("Null message".encode('ascii')+b"\n")
 
