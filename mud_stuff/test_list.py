@@ -1,7 +1,8 @@
 import json
 
 test_list = {
-    "id" : "mud_who",
+    "id" : "auto_who",
+    "channel" : "bitch",
     "data" : [
         {
             "level" : "Jan",
@@ -56,9 +57,9 @@ test_list = {
 }
 
 test_list_json = json.dumps(test_list)
-print(type(test_list_json), ":", test_list_json)
-test_list_python = json.loads(test_list_json)
-print(type(test_list_python), ":", test_list_python)
+# print(type(test_list_json), ":", test_list_json)
+# test_list_python = json.loads(test_list_json)
+# print(type(test_list_python), ":", test_list_python)
 
 # y = json.dumps(test_list, indent=4)
 # print(y)

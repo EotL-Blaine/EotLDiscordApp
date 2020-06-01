@@ -1,18 +1,18 @@
+import asyncio
 import os
+import threading
+
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 
-from discord_stuff import discord_who
-from mud_stuff import mud_who
-from mud_stuff import test_list
+from connect import Connect
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-description = '''The End of the Line LPMUD Discord Bot'''
-
-bot = commands.Bot(command_prefix='!', description=description)
+desc = '''The End of the Line LPMUD Discord Bot'''
+bot = commands.Bot(command_prefix='!', description=desc)
 
 @bot.event
 async def on_ready():
@@ -37,8 +37,8 @@ async def who(ctx, *args):
         syntax: /guild
     """
     # just using the discord who for the time being
-    members = discord_who.get_discord_who(ctx.guild)
-    await ctx.send(f'Members: \n{members}')
+    # members = discord_who.get_discord_who(ctx.guild)
+    # await ctx.send(f'Members: \n{members}')
 
 @bot.command()
 async def joined(ctx, member: discord.Member):
@@ -73,10 +73,10 @@ async def on_message(message):
 
     if (message.content == "!who"):
         # relay who command to telnet
-        j_list= test_list.test_list_json
-        who = mud_who.default_who(j_list)
-        x = "\n".join(who)
-        await message.channel.send(x)
+        # j_list= test_list.test_list_json
+        # who = bot.who(j_list)
+        # x = "\n".join(who)
+        # await message.channel.send(x)
         return
 
     if (message.content[0] == '!'):
@@ -91,34 +91,48 @@ async def on_message(message):
     await message.channel.send(f"```py\n@Relay: {message.content}\n```")
     print(f"Relayed: {message.content}")
 
-# async def send(ctx, *, message) should be correct syntax
-# async def send(*, message):
-#     print(f'Message: {message}\n')
-#     global target_channel
-#     await bot.send_message(target_channel, message)
+async def start():
+    await bot.start(TOKEN)
 
-bot.run(TOKEN)
+def run_it_forever(loop):
+    loop.run_forever()
 
-# COLOR STUFF
-# f"```\n**Blaine** {message.content}\n```"
-# f"```cs\n<Butkus> and then some!\n```"
-# f"```diff\n-<InRed> and on and on again!\n```"
-# f"```CSS\n**<InYellow>** whatever you say, hoss```"
-# f"```cs\n'**<dunno>** asdfadsddfa'\n```"
-# f"```= Blue =\n**<dunno>** asdfadsddfa\n```"
-# f"```asciidoc\n<asciidoc>**<dunno>** asdfadsddfa\n```"
-# f"```---\n**<dunno>** asdfadsddfa\n```"
-# "```xml\n<Blue first then Yellow = OneGreenWord after equals sign>```"
-# f"```CSS\n{jan:6} {n1:13} (Etc) (3m)```"
-# f"```py\n@{jan:6} {n2:13} (Etc) (15m)```"
-# f"```md\n> {jan:6} {n3:13} (Whatever) (>1hr)```"
+def init():
+    # asyncio.get_child_watcher()
+    loop = asyncio.get_event_loop()
+    loop.create_task(start())
 
-# get guild stuff
-# for guild in client.guilds:
-#     if guild.name == GUILD:
-#         break
+    thread = threading.Thread(target=run_it_forever, args=(loop,))
+    thread.start()
+
+class Start:
+    def __init__(self):
+        self.bot = None
+        self.mud = None
+        pass
+
+    async def send_auto_who(self, chan, who):
+        await chan.send(who)
+
+    def auto_who(self, info):
+        from mud_stuff.who import default_who
+        print("MASTER auto_who()")
+        who = default_who(info)
+        chan = bot.get_channel(716783560861941770)
+
+        # Send async
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.send_auto_who(chan, who))
+
+master = Start()
+master.bot = bot
+
+print("Trying to start bot...")
+init()
+# bot.run(TOKEN)
+
+print("Trying to run connect...")
+mud = Connect(master)
+master.mud = mud
 
 
-# print(f'Guild: {guild} - {type(guild)} - {type(guild.id)} - {type(GUILD)}')
-# guild = discord.utils.find(lambda g: str(g.id) == GUILD, client.guilds)
-# guild = discord.utils.get(client.guilds, name=GUILD)
