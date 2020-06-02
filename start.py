@@ -91,19 +91,20 @@ async def on_message(message):
     await message.channel.send(f"```py\n@Relay: {message.content}\n```")
     print(f"Relayed: {message.content}")
 
-async def start():
-    await bot.start(TOKEN)
+# @asyncio.coroutine
+# async def start():
+#     await bot.start(TOKEN)
 
-def run_it_forever(loop):
-    loop.run_forever()
+# def run_it_forever(loop):
+#     loop.run_forever()
 
-def init():
-    # asyncio.get_child_watcher()
-    loop = asyncio.get_event_loop()
-    loop.create_task(start())
-
-    thread = threading.Thread(target=run_it_forever, args=(loop,))
-    thread.start()
+# def init():
+#     # asyncio.get_child_watcher()
+#     bot_loop = asyncio.get_event_loop()
+#     bot_loop.create_task(start())
+#
+#     thread = threading.Thread(target=run_it_forever, args=(bot_loop,))
+#     thread.start()
 
 class Start:
     def __init__(self):
@@ -124,15 +125,76 @@ class Start:
         loop = asyncio.get_event_loop()
         loop.create_task(self.send_auto_who(chan, who))
 
+
 master = Start()
-master.bot = bot
 
-print("Trying to start bot...")
-init()
-# bot.run(TOKEN)
-
-print("Trying to run connect...")
+# Mud object
 mud = Connect(master)
+
+# For callbacks
+master.bot = bot
 master.mud = mud
 
+
+# bot_app = bot.start(TOKEN)
+# bot_task = asyncio.ensure_future(bot_app)
+
+
+
+message = "hi"
+loop = asyncio.get_event_loop()
+loop.create_task(bot.start(TOKEN))
+loop.run_until_complete(mud.mud_client(message, loop))
+loop.close()
+
+
+
+
+
+
+# mud.do_connect()
+# mud_app = mud.tn
+# mud_app = mud.connect()
+# mud_task = asyncio.ensure_future(mud.connect())
+# loop = asyncio.get_event_loop()
+# loop.run_forever()
+
+# Get the asyncio event loop
+
+# print("==[ Getting the asyncio.get_event_loop()")
+# # main_loop = asyncio.get_event_loop()
+# print("==[ Should have asynctio event loop")
+# # asyncio.get_child_watcher()
+#
+# print("\n==< Creating MUD Bot task")
+# # mud_task = main_loop.create_task(mud.do_connect())
+# # thread_mud = threading.Thread(target=mud.do_connect())
+# # thread_mud.start()
+# print("==< MUD Bot task should be created")
+#
+#
+#
+#
+# print("==[ Creating Discord Bot Task")
+# # bot_task = main_loop.create_task(start())
+# print("==[ Discord Bot Task Assigned")
+# main_loop.run_until_complete(bot_task)
+# thread = threading.Thread(target=run_it_forever, args=(bot_task,))
+# thread.start()
+
+    # bot.run(TOKEN)
+
+
+# print("*** Attempting to start the tasks")
+# main_loop.run_until_complete(mud_task)
+# mud_loop = asyncio.get_event_loop()
+# mud_loop.run_until_complete(mud.connect())
+# mud_loop.close()
+
+# main_loop = asyncio.get_event_loop()
+
+# thread_bot = threading.Thread(target=run_it_forever, args=(bot_task,))
+# thread_bot.start()
+# thread_mud = threading.Thread(target=run_it_forever, args=(mud_task,))
+# thread_mud.start()
 

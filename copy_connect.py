@@ -1,9 +1,12 @@
 import asyncio
 import json
-import socket
 from telnetlib import Telnet
 import os
 from dotenv import load_dotenv
+
+# from mud_stuff import who
+# import start
+from mud_stuff.test_list import test_list
 
 class Connect:
 
@@ -13,89 +16,8 @@ class Connect:
         self.PORT = os.getenv('EOTL_PORT')
         self.USER = os.getenv('EOTL_USER')
         self.PASS = os.getenv('EOTL_PASS')
-        self.PROMPT = b"Ready> "
+        self.PROMPT = b"Ready>"
         self.master = master
-        # reload(sys)
-        # sys.setdefaultencoding('utf-8')
-
-    def filter_crap(self, text):
-        return ''.join([i if ord(i) < 128 else ' ' for i in text])
-
-
-    async def mud_client(self, message, loop):
-        try:
-            reader, writer = await asyncio.open_connection(self.HOST, self.PORT, loop=loop)
-        except socket.timeout:
-            print("Connection timeout caught.")
-        # print("Send: %r" % message)
-        # writer.write(message.encode())
-
-        # data = await reader.read(100)
-        # print("Received: %r" % data.decode())
-
-        while True:
-            text = await reader.readuntil(b"Enter your name: ")
-            print(text.decode())
-            writer.write(self.USER.encode('ascii') + b"\n")
-            text = await reader.readuntil(b"Password: ")
-            print(text.decode())
-            writer.write(self.PASS.encode('ascii') + b"\n")
-            #     break
-            # text = await reader.readuntil(b'The Eotl uptime meter')
-            # print("TYPE: ", type(text))
-            # print(text.decode('unicode'))
-            text = await reader.readuntil(self.PROMPT)
-            text = await reader.readuntil(self.PROMPT)
-            # print(text.decode('unicod
-            # print(text.decode('ascii'))
-
-            break
-
-        asdf = 1
-        print("========[ CONNECTED ]========")
-        while True:
-            # print("Starting second loop...")
-
-            if asdf == 1:
-                writer.write("who".encode('ascii') + b"\n")
-                asdf = 2
-            elif asdf == 2:
-                writer.write("help rules".encode('ascii') +b"\n")
-                asdf = 3
-
-            btext = await reader.readuntil(b'\r\n')
-            try:
-                # text = self.filter_crap(btext)
-                # print(text)
-                # ctext = btext.decode('cp437', "ignore")
-                # utext = btext.decode('utf-8', "backslashreplace")
-                # utext = btext.decode('utf-8')
-                text = btext.decode('ascii', "ignore")
-                text = ''.join(char for char in text if char != '')
-                # tainted_text = btext.decode('ascii', "ignore")
-                # encode_tainted = tainted_text.encode("ascii", "ignore")
-                # text = encode_tainted.decode()
-                # import re
-                # t = "Blaine "
-                # print("BEFORE REGEX: ",t)
-                # # text2 = re.sub(r'[^\x20-\x7E]', r'', text)
-                # t2 = ''.join(char for char in t if char != '')
-                # print("AFTER REGEX:  ", t2)
-                # # Remove prompt, if present
-                # # print("TEXT[:6] is:",text[:6]+"|")
-                if text[:7] == "Ready> ":
-                # if text.startswith("Ready> "):
-                    text = text[7:]
-                print(text, end="")
-
-            except Exception as ex:
-                print("======\nException: ",ex,"\n======\n")
-
-        connected = True
-
-        print("Close the socket")
-        writer.close()
-
 
     @asyncio.coroutine
     def connect(self):
