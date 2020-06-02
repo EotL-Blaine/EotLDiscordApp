@@ -43,13 +43,15 @@ async def who(ctx, *args):
 @bot.command()
 async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
+
     # await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
     await ctx.send(
         f'Welcome, {member.name} to the End of the Line Discord!,\n\n'
         f'Remember the rules:\n'
-        "1) have fun\n2) don't piss someone off bigger than you"
-        )
-        # show additional commands for the bot, and in-game
+        "1) have fun\n"
+        "2) don't piss someone off bigger than you"
+    )
+    # show additional commands for the bot, and in-game
 
 @bot.command(name='test_join')
 async def test_join(ctx):
@@ -91,22 +93,10 @@ async def on_message(message):
     await message.channel.send(f"```py\n@Relay: {message.content}\n```")
     print(f"Relayed: {message.content}")
 
-# @asyncio.coroutine
-# async def start():
-#     await bot.start(TOKEN)
-
-# def run_it_forever(loop):
-#     loop.run_forever()
-
-# def init():
-#     # asyncio.get_child_watcher()
-#     bot_loop = asyncio.get_event_loop()
-#     bot_loop.create_task(start())
-#
-#     thread = threading.Thread(target=run_it_forever, args=(bot_loop,))
-#     thread.start()
-
 class Start:
+    '''
+
+    '''
     def __init__(self):
         self.bot = None
         self.mud = None
@@ -135,21 +125,14 @@ mud = Connect(master)
 master.bot = bot
 master.mud = mud
 
-
-# bot_app = bot.start(TOKEN)
-# bot_task = asyncio.ensure_future(bot_app)
-
-
-
-message = "hi"
 loop = asyncio.get_event_loop()
 loop.create_task(bot.start(TOKEN))
-loop.run_until_complete(mud.mud_client(message, loop))
+loop.run_until_complete(mud.mud_connect(loop))
 loop.close()
 
+# ===========================================================================================
 
-
-
+# ===========================================================================================
 
 
 # mud.do_connect()
@@ -198,3 +181,17 @@ loop.close()
 # thread_mud = threading.Thread(target=run_it_forever, args=(mud_task,))
 # thread_mud.start()
 
+# @asyncio.coroutine
+# async def start():
+#     await bot.start(TOKEN)
+
+# def run_it_forever(loop):
+#     loop.run_forever()
+
+# def init():
+#     # asyncio.get_child_watcher()
+#     bot_loop = asyncio.get_event_loop()
+#     bot_loop.create_task(start())
+#
+#     thread = threading.Thread(target=run_it_forever, args=(bot_loop,))
+#     thread.start()
