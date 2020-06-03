@@ -6,6 +6,7 @@ import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 
+from bot_master import Master
 from connect import Connect
 
 load_dotenv()
@@ -93,30 +94,7 @@ async def on_message(message):
     await message.channel.send(f"```py\n@Relay: {message.content}\n```")
     print(f"Relayed: {message.content}")
 
-class Start:
-    '''
-
-    '''
-    def __init__(self):
-        self.bot = None
-        self.mud = None
-        pass
-
-    async def send_auto_who(self, chan, who):
-        await chan.send(who)
-
-    def auto_who(self, info):
-        from mud_stuff.who import default_who
-        print("MASTER auto_who()")
-        who = default_who(info)
-        chan = bot.get_channel(716783560861941770)
-
-        # Send async
-        loop = asyncio.get_event_loop()
-        loop.create_task(self.send_auto_who(chan, who))
-
-
-master = Start()
+master = Master()
 
 # Mud object
 mud = Connect(master)
@@ -128,6 +106,7 @@ master.mud = mud
 loop = asyncio.get_event_loop()
 loop.create_task(bot.start(TOKEN))
 loop.run_until_complete(mud.mud_connect(loop))
+master.loop = loop
 loop.close()
 
 # ===========================================================================================

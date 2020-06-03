@@ -32,11 +32,8 @@ def get_level(lvl, counts):
     counts["total"] += 1
     return l
 
-# def default_who(jlist=None):
-def default_who(plist):
-    # plist = test_list.test_list_python if jlist is None else json.loads(jlist)
+def default_who(data):
     counts = {"player": 0, "wiz": 0, "guest": 0, "active": 0, "total": 0}
-    data = plist["data"]
     who = ["```md", "==============[ EotL - Who ]==============", ]
 
     for d in data:
@@ -67,16 +64,16 @@ def default_who(plist):
     )
     return "\n".join(who)
 
-def auto_who(pkg):
+# def auto_who(pkg):
+#
+#     pass
 
-    pass
-
-def main():
-    print("who.main()")
-    # start.relay_channel(test_list.test_list_python)
-
-main()
-print("Done")
+# def main():
+#     print("who.main()")
+#     # start.relay_channel(test_list.test_list_python)
+#
+# main()
+# print("Done")
 # if __name__ == "__main__":
 #     main()
     # Convert test list to json

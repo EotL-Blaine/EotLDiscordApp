@@ -15,6 +15,9 @@ class Connect:
         self.PASS = os.getenv('EOTL_PASS')
         self.PROMPT = b"Ready> "
         self.master = master
+        self.END_PROMPT = b'***END***\r\n'
+        self.END_OF_LINE = b"\r\n"
+        self.END_OF_WHO = self.PROMPT
 
     async def mud_connect(self, loop):
         try:
@@ -34,36 +37,70 @@ class Connect:
         # break
 
         print("========[ CONNECTED ]========")
+        self.END = self.END_PROMPT
         while True:
-            btext = await reader.readuntil(b'\r\n')
+            btext = await reader.readuntil(self.END)
             try:
                 text = btext.decode('ascii', "ignore")
                 text = ''.join(char for char in text if char != '')
+
+                # Strip prompt
                 if text[:7] == "Ready> ":
                 # if text.startswith("Ready> "):
                     text = text[7:]
-                print(text, end="")
+                # print(text, end="")
+                # print("----------------------")
+                # print(text[:-11])
 
+
+                # print(text, end="")
             except Exception as ex:
-                print("======\nException: ",ex,"\n======\n")
+                print("==================\nmud_connect\nException: ",ex,"\n==================\n")
 
-        connected = True
+            self.text_received(text[:-11])
+        # print("Close the socket")
+        # writer.close()
 
-        print("Close the socket")
-        writer.close()
+
+    def text_received(self, text):
+        '''
+        Called when text is received by the bot/user on the MUD
+        :param text: the text received
+        :return:
+        '''
+
+        if text is None or text == '':
+            return
+
+        # print("text_received:\n",text)
+
+        # Text is JSON, so it needs to be sent to discord bot.receive_json()
+        ind = text.find("***JSON***")
+        if (ind >= 0):
+            self.master.json_from_mud(text[ind+10:])
+            # print("Sent json_from_mud to master")
+
+        # print(f"TEXT:\n{text}")
 
 
-    def package_received(self, jpkg=None):
+
+
+
+
+    def send_json_from_mud(self, jtext):
+        print(jtext)
         # for testing purposes
         # if jpkg is None:
         #     jpkg = test_list.test_list_json
+        # It
+
 
         # Convert json pkg to python dict
-        pkg = json.loads(jpkg)
+        # pkg = json.loads(jpkg)
 
-        # Send it to the Discord bot
-        if pkg["id"] == "auto_who":
-            self.master.auto_who(pkg)
+        # # Send it to the Discord bot
+        # if pkg["id"] == "auto_who":
+        #     self.master.auto_who(pkg)
 
 
 
