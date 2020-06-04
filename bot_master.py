@@ -9,8 +9,6 @@ class Master:
     def __init__(self):
         self.bot = None
         self.mud = None
-        self.loop = None
-        pass
 
     async def send_to_channel(self, chan, what):
         await chan.send(what)
@@ -31,5 +29,11 @@ class Master:
         # Auto-who posted from MUD
         if pkg["id"] == "auto_who":
             self.auto_who(pkg["data"])
+        elif pkg["id"] == "relay":
+            self.relay(pkg)
         else:
             pass
+
+    def relay(self, pkg):
+        chan = self.bot.channels.find(pkg["channel"])
+        print("CHANNEL:", chan)
