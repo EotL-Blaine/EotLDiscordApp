@@ -18,6 +18,7 @@ class Connect:
         self.END_PROMPT = b'***END***\r\n'
         self.END_OF_LINE = b"\r\n"
         self.END_OF_WHO = self.PROMPT
+        self.CURRENT_TEXT = ""
 
     async def mud_connect(self, loop):
         try:
@@ -37,6 +38,7 @@ class Connect:
         # break
 
         print("========[ CONNECTED ]========")
+        # self.END = self.END_PROMPT
         self.END = self.END_PROMPT
         while True:
             btext = await reader.readuntil(self.END)
@@ -46,19 +48,14 @@ class Connect:
 
                 # Strip prompt
                 if text[:7] == "Ready> ":
-                # if text.startswith("Ready> "):
                     text = text[7:]
-                # print(text, end="")
-                # print("----------------------")
-                # print(text[:-11])
-
-
-                # print(text, end="")
             except Exception as ex:
                 print("==================\nmud_connect\nException: ",ex,"\n==================\n")
 
-            self.text_received(text[:-11])
+            # self.text_received(text[:-11])
+            self.text_received(text)
         # print("Close the socket")
+
         # writer.close()
 
 
@@ -69,7 +66,13 @@ class Connect:
         :return:
         '''
 
-        if text is None or text == '':
+        if text is None or text == '' or len(text < 11):
+            return
+
+        # strip end
+        if text[-11:-2] == "***END***":
+            text = text[:-11]
+        else: # this shouldn't happen
             return
 
         # print("text_received:\n",text)
@@ -78,14 +81,8 @@ class Connect:
         ind = text.find("***JSON***")
         if (ind >= 0):
             self.master.json_from_mud(text[ind+10:])
-            # print("Sent json_from_mud to master")
-
-        # print(f"TEXT:\n{text}")
-
-
-
-
-
+        else:
+            print(f"Received from MUD:\n{text}")
 
     def send_json_from_mud(self, jtext):
         print(jtext)
