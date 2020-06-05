@@ -53,6 +53,10 @@ class Connect:
                 print("==================\nmud_connect\nException: ",ex,"\n==================\n")
 
             # self.text_received(text[:-11])
+            # print("TEXT:", text)
+            text = text.replace('\n', '').replace('\r', '')
+            # text = ''.join(text.split("\n"))
+            # print("TEXT:", text)
             self.text_received(text)
         # print("Close the socket")
 
@@ -66,12 +70,16 @@ class Connect:
         :return:
         '''
 
-        if text is None or text == '' or len(text < 11):
+        if text is None or text == '' or len(text) < 11:
             return
 
         # strip end
-        if text[-11:-2] == "***END***":
-            text = text[:-11]
+        # if text[-11:-2] == "***END***":
+        if "***END***" in text:
+            text = text.replace("***END***", "")
+            print("NEW TEXT:", text)
+            # text = text[:-11]
+
         else: # this shouldn't happen
             return
 

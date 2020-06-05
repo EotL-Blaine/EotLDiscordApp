@@ -24,6 +24,8 @@ class Master:
 
     def json_from_mud(self, jstr):
         # print("JSON_FROM_MUD\n",jstr)
+        # print("TYPE:", type(jstr))
+        print("BEFORE:", jstr)
         pkg = json.loads(jstr)
 
         # Auto-who posted from MUD
@@ -35,5 +37,15 @@ class Master:
             pass
 
     def relay(self, pkg):
-        chan = self.bot.channels.find(pkg["channel"])
-        print("CHANNEL:", chan)
+        for ch in self.bot.get_all_channels():
+            if ch.name == pkg["channel"]:
+                break
+        # msg = f'```[**{pkg["player"].capitalize()}**]: {pkg["message"]}```'
+        msg = f'>>> **[{pkg["player"].capitalize()}]** {pkg["message"]}'
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.send_to_channel(ch, msg))
+
+
+
+        # print("CHANNEL:", chan)
+        # print(pkg)
